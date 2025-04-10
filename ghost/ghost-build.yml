@@ -1,0 +1,46 @@
+# H17I Ghost Building System.
+
+name: H17I Ghost Build System (Artifacts).
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout code.
+        uses: actions/checkout@v4
+
+      - name: Set up Python.
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Execute Windows auxiliary processes.
+        if: runner.os == 'Windows'
+        run: python ghost-build/ghost-aux-win.py
+
+      - name: Install compiler (Linux only).
+        if: runner.os == 'Linux'
+        run: sudo apt update && sudo apt install -y build-essential
+
+      - name: Execute Linux auxiliary processes.
+        if: runner.os == 'Linux'
+        run: python ghost-build/ghost-aux-linux.py
+
+      - name: Build with Ghost.
+        run: python ghost-build/ghost-build.py
+
+      - name: Upload build artifact.
+        uses: actions/upload-artifact@v4
+        with:
+          name: Ghost Build for ${{ runner.os }}
+          path: |
+            ghost-build-linux
+            ghost-build-windows.exe
