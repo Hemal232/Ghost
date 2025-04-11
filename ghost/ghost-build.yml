@@ -22,17 +22,9 @@ jobs:
         with:
           python-version: "3.x"
 
-      - name: Execute Windows auxiliary processes.
-        if: runner.os == 'Windows'
-        run: python ghost-build/ghost-aux-win.py
-
-      - name: Install compiler (Linux only).
+      - name: (Linux) Install compiler.
         if: runner.os == 'Linux'
         run: sudo apt update && sudo apt install -y build-essential
-
-      - name: Execute Linux auxiliary processes.
-        if: runner.os == 'Linux'
-        run: python ghost-build/ghost-aux-linux.py
 
       - name: Build with Ghost.
         run: python ghost-build/ghost-build.py
