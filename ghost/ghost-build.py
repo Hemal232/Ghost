@@ -94,7 +94,7 @@ if gh_sys == 'W' and build_compiler == 'Clang':
 build_cmd = f'{build_compiler_cmd} {main_file} -o {"ghost-build-" + ("windows.exe" if gh_sys == "W" else "linux")}{cf_win if gh_sys == "W" else cf_linux}'
 
 # Auxiliary files: Windows.
-if gh_sys == 'W' and win_aux:
+if win_aux and gh_sys == 'W':
     print('[BUILD-AUXILIARY] Running Windows auxiliary file...')
 
     if not exists(win_aux): ghost_fail('[CONFIG&BUILD] Invalid Windows auxiliary file.', 15)
@@ -108,7 +108,7 @@ else:
     print('[BUILD-AUXILIARY] Windows auxiliary file is not specified.')
 
 # Auxiliary files: Linux.
-if gh_sys == 'L' and linux_aux:
+if linux_aux and gh_sys == 'L':
     print('[BUILD-AUXILIARY] Running Linux auxiliary file...')
 
     if not exists(linux_aux): ghost_fail('[CONFIG&BUILD] Invalid Linux auxiliary file.', 17)
